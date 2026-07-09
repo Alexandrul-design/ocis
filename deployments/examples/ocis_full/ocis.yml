@@ -18,6 +18,12 @@ services:
     # therefore we ignore the error and then start the ocis server
     command: ["-c", "ocis init || true; exec ocis server"]
     environment:
+      # Kiteworks theme: serve themes from the mounted host dir so edits to
+      # theme.json show on a browser refresh without rebuilding the image
+      WEB_ASSET_THEMES_PATH: /themes
+      # Serve the repo's web build: it contains the Vault switcher UI, which the
+      # published oCIS images (incl. 8.1.0-rc.2) do NOT bundle yet.
+      WEB_ASSET_CORE_PATH: /web-core
       # enable services that are not started automatically
       OCIS_ADD_RUN_SERVICES: ${START_ADDITIONAL_SERVICES}
       OCIS_URL: https://${OCIS_DOMAIN:-ocis.owncloud.test}
@@ -36,6 +42,12 @@ services:
       IDM_ADMIN_PASSWORD: "${ADMIN_PASSWORD:-admin}" # this overrides the admin password from the configuration file
       # demo users
       IDM_CREATE_DEMO_USERS: "${DEMO_USERS:-false}"
+      # enable favorites (star files/folders) in the web UI and clients
+      FRONTEND_ENABLE_FAVORITES: "true"
+      # signal the web client that full-text (search-inside-file) is available (Tika is running)
+      FRONTEND_FULL_TEXT_SEARCH_ENABLED: "true"
+      # allow app passwords/tokens for WebDAV/desktop/mobile/rclone clients (needs auth-app service)
+      PROXY_ENABLE_APP_AUTH: "true"
       # email server (if configured)
       NOTIFICATIONS_SMTP_HOST: "${SMTP_HOST}"
       NOTIFICATIONS_SMTP_PORT: "${SMTP_PORT}"
@@ -57,6 +69,12 @@ services:
       - ./config/ocis/app-registry.yaml:/etc/ocis/app-registry.yaml
       - ./config/ocis/csp.yaml:/etc/ocis/csp.yaml
       - ./config/ocis/banned-password-list.txt:/etc/ocis/banned-password-list.txt
+      # Kiteworks theme: load the sidebar-text override stylesheet into ownCloud Web
+      - ./config/ocis/web.yaml:/etc/ocis/web.yaml
+      # Kiteworks theme: serve themes from the repo so theme.json edits are live
+      - ../../../services/web/assets/themes:/themes
+      # Web build with the Vault switcher (not present in published images)
+      - ../../../services/web/assets/core:/web-core
       # configure the .env file to use own paths instead of docker internal volumes
       - ${OCIS_CONFIG_DIR:-ocis-config}:/etc/ocis
       - ${OCIS_DATA_DIR:-ocis-data}:/var/lib/ocis

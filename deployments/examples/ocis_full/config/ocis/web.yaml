@@ -1,0 +1,14 @@
+# ownCloud Web service config — Kiteworks theme overrides.
+#
+# Loads an extra stylesheet into ownCloud Web. Needed because the
+# dark-brand sidebar (background-sidebar #283878) has no dedicated
+# "sidebar text" token; this CSS forces white nav labels on the navy
+# fill in the light themes so they stay WCAG AA (white on #283878 ≈ 10.9:1).
+#
+# The href is relative to the web root. Themes are served under /themes,
+# so the file at assets/themes/owncloud/assets/kiteworks-overrides.css
+# is reachable at themes/owncloud/assets/kiteworks-overrides.css.
+web:
+  config:
+    styles:
+      - href: "themes/owncloud/assets/kiteworks-overrides.css"
