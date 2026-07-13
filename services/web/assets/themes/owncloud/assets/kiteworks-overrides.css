@@ -1,0 +1,542 @@
+/* ============================================================
+   Kiteworks theme overrides — things the colorPalette tokens
+   cannot express on their own.
+
+   Loaded via web config:  styles: [{ href: "themes/owncloud/assets/kiteworks-overrides.css" }]
+   (see deployments/examples/ocis_full/config/ocis/web.yaml)
+
+   Single source of truth for CSS-level theme tweaks. Prefer editing
+   this file over patching the compiled web bundle.
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. Left nav on dark sidebar: white labels + icons.
+   ownCloud Web has no "sidebar text" token; resting labels inherit
+   text-default (near-black), which on #0F152A fails WCAG AA. Force
+   white, scoped to the sidebar, light themes only.
+   ------------------------------------------------------------ */
+body:not(.oc-dark) #web-nav-sidebar .oc-sidebar-nav-item-link,
+body:not(.oc-dark) #web-nav-sidebar .oc-sidebar-nav-item-link .text {
+  color: #ffffff !important;
+}
+/* !important here so the section-8 raw-button hover rule can't grey these
+   out (nav items are passive-raw buttons; on hover the blanket would set
+   the icon/label to passive-default). ID specificity + !important wins. */
+body:not(.oc-dark) #web-nav-sidebar .oc-sidebar-nav-item-link .oc-icon > svg {
+  fill: #ffffff !important;
+}
+body:not(.oc-dark) #web-nav-sidebar .oc-sidebar-nav li a:not(.active):not(:hover):not(:focus),
+body:not(.oc-dark) #web-nav-sidebar .oc-sidebar-nav li button:not(.active):not(:hover):not(:focus) {
+  color: #ffffff;
+}
+
+/* ------------------------------------------------------------
+   2. Selected (active) left-nav item = blue 700 fill, white content.
+   Active item renders as a transparent button, so give it a bg here.
+   Hover (non-active) already resolves to swatch-primary-hover (#283878).
+   ------------------------------------------------------------ */
+.oc-sidebar-nav-item-link.active {
+  background-color: #283878 !important;
+  color: #ffffff !important;
+}
+.oc-sidebar-nav-item-link.active,
+.oc-sidebar-nav-item-link.active .text {
+  font-weight: var(--oc-font-weight-bold, 700) !important;   /* bold the selected item's label */
+}
+.oc-sidebar-nav-item-link.active .oc-icon > svg {
+  fill: #ffffff !important;
+}
+
+/* ------------------------------------------------------------
+   3. Right side panel stays white (exception).
+   .sidebar-panel shares --oc-color-background-sidebar with the left
+   nav; the left nav is dark, but the right details panel must be white.
+   ------------------------------------------------------------ */
+.sidebar-panel {
+  background-color: var(--oc-color-background-default) !important;
+}
+
+/* ------------------------------------------------------------
+   4. Main content flush to left/right/bottom (top gap kept) +
+   square corners on content surfaces.
+   ------------------------------------------------------------ */
+body:has(#web-content) {
+  padding-right: 0 !important;
+  padding-left: 0 !important;
+  padding-bottom: 0 !important;
+}
+#web-content #web-content-main .app-container {
+  border-radius: 0 !important;
+}
+#files-app-bar,
+#admin-settings-app-bar {
+  border-top-right-radius: 0 !important;
+}
+#web-nav-sidebar {
+  border-radius: 0 !important;
+}
+
+/* ------------------------------------------------------------
+   5. Secondary (outlined) button: keep the DEFAULT text/icon color
+   on hover/focus instead of flipping to white.
+   Resting text is grey (swatch-passive-default) and can't read on the
+   blue hover fill, so the hover fill is softened to a light neutral
+   (background-hover) to keep the default-colour text legible.
+   ------------------------------------------------------------ */
+.oc-button-passive-outline:hover:not([disabled]),
+.oc-button-passive-outline:focus:not([disabled]) {
+  color: var(--oc-color-swatch-passive-default) !important;
+  background-color: var(--oc-color-background-hover) !important;
+  border-color: var(--oc-color-swatch-passive-default) !important;
+}
+.oc-button-passive-outline:hover:not([disabled]) .oc-icon > svg,
+.oc-button-passive-outline:focus:not([disabled]) .oc-icon > svg {
+  fill: var(--oc-color-swatch-passive-default) !important;
+}
+
+/* ------------------------------------------------------------
+   6. Collapse (toggle-sidebar) button: fixed 38x38, 12px from the nav's
+   right edge. Core makes it full-width and tall (min-height:3rem) inside a
+   column-flex nav, so we pin the size, center the icon, right-align with
+   align-self, and set a 12px right margin. White icon; no hover/pressed
+   background (transparent). Scoped to #web-nav-sidebar (ID) so it wins over
+   the section-8 raw-button hover rule.
+   ------------------------------------------------------------ */
+#web-nav-sidebar .toggle-sidebar-button {
+  width: 38px !important;
+  height: 38px !important;
+  min-width: 38px !important;
+  min-height: 38px !important;
+  padding: 0 !important;
+  border-radius: 4px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  align-self: flex-end !important;   /* right-align within the column-flex nav */
+  margin-right: 12px !important;      /* 12px gap from the nav's right edge */
+  background-color: transparent !important;
+  transition: background-color .15s ease;
+}
+/* the 38x38 button is the box now — icon carries no own padding/highlight */
+#web-nav-sidebar .toggle-sidebar-button .oc-icon {
+  padding: 0 !important;
+  border-radius: 0 !important;
+  background-color: transparent !important;
+}
+#web-nav-sidebar .toggle-sidebar-button .oc-icon > svg,
+#web-nav-sidebar .toggle-sidebar-button:hover .oc-icon > svg,
+#web-nav-sidebar .toggle-sidebar-button:active .oc-icon > svg {
+  fill: #ffffff !important;
+}
+/* No hover/pressed background on the collapse button — keep it transparent
+   (icon stays white). */
+#web-nav-sidebar .toggle-sidebar-button:hover,
+#web-nav-sidebar .toggle-sidebar-button:active {
+  background-color: transparent !important;
+}
+
+/* ------------------------------------------------------------
+   7. Left-nav bottom text (.versions) — light grey, readable on the navy.
+   It sits at the bottom of #web-nav-sidebar and is NOT a nav link, so it
+   inherits near-black text-default (~1.5:1 on #0F152A → fails WCAG AA).
+   grey.600 #838382 on #0F152A = 4.77:1 → passes AA. Light themes only.
+   ------------------------------------------------------------ */
+body:not(.oc-dark) #web-nav-sidebar .versions,
+body:not(.oc-dark) #web-nav-sidebar .versions * {
+  color: #838382 !important;
+}
+body:not(.oc-dark) #web-nav-sidebar .versions .oc-icon > svg {
+  fill: #838382 !important;
+}
+
+/* ------------------------------------------------------------
+   8. Tertiary (raw) buttons: keep DEFAULT text + icon color on
+   hover/focus instead of turning blue (swatch-passive-hover /
+   swatch-brand-hover). Covers the file-selection batch-action bar,
+   right-panel action items, list-item actions (share / copy-link),
+   the sort-column arrow (.oc-button-sort), etc. — all oc-button raw
+   variations. Any background-based hover feedback is left intact.
+   Left-nav items are unaffected (their hover is governed by higher-
+   specificity #web-nav-sidebar rules).
+   ------------------------------------------------------------ */
+.oc-button-passive-raw:hover:not([disabled]),
+.oc-button-passive-raw:focus:not([disabled]) {
+  color: var(--oc-color-swatch-passive-default) !important;
+}
+.oc-button-passive-raw:hover:not([disabled]) .oc-icon > svg,
+.oc-button-passive-raw:focus:not([disabled]) .oc-icon > svg {
+  fill: var(--oc-color-swatch-passive-default) !important;
+}
+.oc-button-brand-raw:hover:not([disabled]),
+.oc-button-brand-raw:focus:not([disabled]) {
+  color: var(--oc-color-swatch-brand-default) !important;
+}
+.oc-button-brand-raw:hover:not([disabled]) .oc-icon > svg,
+.oc-button-brand-raw:focus:not([disabled]) .oc-icon > svg {
+  fill: var(--oc-color-swatch-brand-default) !important;
+}
+/* Sort-column arrow, in case it isn't a passive-raw button. */
+.oc-button-sort:hover .oc-icon > svg,
+.oc-button-sort:focus .oc-icon > svg {
+  fill: var(--oc-color-swatch-passive-default) !important;
+}
+
+/* ------------------------------------------------------------
+   9. Corner radii — normalize ALREADY-ROUNDED inputs/buttons to 4px,
+   and modals to 12px. Elements that were square (radius 0) are left
+   square on purpose — we don't add rounding where there was none.
+   Left untouched (were square/borderless): .oc-text-input, .oc-textarea.
+   Left untouched (already 4px natively): .oc-button, .vs__dropdown-toggle.
+   Normalized here (were 5px / 25px pill): button-group, password field,
+   search field.
+   ------------------------------------------------------------ */
+.oc-button-group,
+.oc-text-input-password-wrapper,
+.oc-search-input {
+  border-radius: 4px !important;
+}
+.oc-modal {
+  border-radius: 12px !important;
+}
+.oc-modal-title {
+  border-top-left-radius: 12px !important;
+  border-top-right-radius: 12px !important;
+}
+.oc-modal-body-actions {
+  border-bottom-left-radius: 12px !important;
+  border-bottom-right-radius: 12px !important;
+}
+
+/* ------------------------------------------------------------
+   10. Input fields = white fill. Core uses tinted fills in several
+   spots: the password field and the select/dropdown control use
+   background-highlight (light blue), and the textarea uses
+   background-muted (grey). Force the field surfaces white. (Standard
+   text inputs and search already use --oc-color-input-bg = #fff.)
+   background-color (not the shorthand) so dropdown-arrow background
+   images are preserved. NOTE: this also whitens a disabled select —
+   ask if the disabled grey should be kept.
+   ------------------------------------------------------------ */
+.oc-text-input,
+.oc-input,
+.oc-textarea,
+.oc-search-input,
+.oc-text-input-password-wrapper,
+.oc-text-input-password-wrapper button,
+.oc-select .vs__dropdown-toggle {
+  background-color: var(--oc-color-background-default) !important;
+}
+
+/* ------------------------------------------------------------
+   11. Login (initial) page: white background, dark/colored logo.
+   The dark navy photo is set inline as background-image on .oc-login;
+   !important removes it and forces a white page. The logo (logo.login)
+   stays the colored/dark Kiteworks mark, which reads on white.
+   (loginPage.backgroundImg is also blanked in theme.json.)
+   ------------------------------------------------------------ */
+.oc-login {
+  background-image: none !important;
+  background-color: var(--oc-color-background-default) !important;
+}
+
+/* ------------------------------------------------------------
+   12. Action / context-menu items: keep the label at its DEFAULT color
+   on hover/focus. Core recolors the item's label span to
+   swatch-brand-hover (navy) — which reads as the text "lightening" in the
+   right side-panel actions and "turning blue" in the 3-dot (more) menu.
+   Same rule drives both; `inherit` restores the resting color.
+   (The hover background stays, so there's still hover feedback.)
+   ------------------------------------------------------------ */
+.oc-menu-item-hover a:hover span,
+.oc-menu-item-hover a:focus span,
+.tippy-box[data-theme~="none"] li.oc-menu-item-hover .item-has-switch:hover span,
+.tippy-box[data-theme~="none"] li.oc-menu-item-hover .item-has-switch:focus span,
+.tippy-box[data-theme~="none"] li.oc-menu-item-hover button:not([role="switch"]):hover span,
+.tippy-box[data-theme~="none"] li.oc-menu-item-hover button:not([role="switch"]):focus span {
+  color: inherit !important;
+}
+
+/* ------------------------------------------------------------
+   13. Left-nav items on focus: show ONLY the (white) focus outline, no
+   background change. Core sets background-hover on :focus for non-active
+   items (bundled with the :hover rule). Keep the bg transparent on
+   focus-without-hover so keyboard focus shows just the outline, while
+   mouse hover still gets its #283878 fill. The outline itself (global
+   :focus-visible ring) is untouched. Active/selected item is unaffected.
+   ------------------------------------------------------------ */
+#web-nav-sidebar .oc-sidebar-nav li a:not(.active):focus:not(:hover),
+#web-nav-sidebar .oc-sidebar-nav li button:not(.active):focus:not(:hover),
+#web-nav-sidebar .oc-sidebar-nav-item-link:not(.active):focus:not(:hover) {
+  background-color: transparent !important;
+}
+
+/* ------------------------------------------------------------
+   14. Dropdown menus: hover/selected highlight radius = 4px.
+   3-dot "more" menu items were 5px, app-switcher items 8px, v-select
+   options inherited the menu radius. Normalize the highlighted-row
+   corners to 4px across all three.
+   ------------------------------------------------------------ */
+/* 3-dot / context "more" menu item rows */
+.tippy-box[data-theme~="none"] li.oc-menu-item-hover a:hover:not([disabled]),
+.tippy-box[data-theme~="none"] li.oc-menu-item-hover a:focus:not([disabled]),
+.tippy-box[data-theme~="none"] li.oc-menu-item-hover .item-has-switch:hover:not([disabled]),
+.tippy-box[data-theme~="none"] li.oc-menu-item-hover .item-has-switch:focus:not([disabled]),
+.tippy-box[data-theme~="none"] li.oc-menu-item-hover button:not([role="switch"]):hover:not([disabled]),
+.tippy-box[data-theme~="none"] li.oc-menu-item-hover button:not([role="switch"]):focus:not([disabled]) {
+  border-radius: 4px !important;
+}
+/* app-switcher item rows */
+.applications-list .oc-button {
+  border-radius: 4px !important;
+}
+/* v-select dropdown option rows (e.g. permissions/role selects) */
+.oc-select .vs__dropdown-option,
+.oc-select .vs__dropdown-option--highlight,
+.oc-select .vs__dropdown-option--selected {
+  border-radius: 4px !important;
+}
+
+/* ------------------------------------------------------------
+   15. App-switcher icon tiles (.oc-application-icon): neutral-grey tile +
+   dark-grey glyph at rest; light-blue tile + darker-blue glyph on
+   hover/focus and for the current (selected) app. Corners 4px.
+   The colored tile bg + inset shadow are set inline per app, so we
+   override them with !important.
+   ------------------------------------------------------------ */
+.applications-list .oc-application-icon {
+  background: var(--oc-color-background-hover) !important;   /* light grey #F0F0EF */
+  box-shadow: none !important;
+  border-radius: 4px !important;
+}
+.applications-list .oc-application-icon svg {
+  fill: var(--oc-color-text-muted) !important;               /* dark grey #585757 */
+}
+/* hover / focus / current app -> darker-grey tile, dark-ink glyph
+   (matches the selected-app tile set in item 19c, so hovered and selected read as one) */
+.applications-list li a:hover .oc-application-icon,
+.applications-list li button:hover .oc-application-icon,
+.applications-list li a:focus .oc-application-icon,
+.applications-list li button:focus .oc-application-icon,
+.applications-list .oc-button-primary .oc-application-icon,
+.applications-list .router-link-active .oc-application-icon {
+  background: #E1E0DE !important;                                /* grey 300, darker than the row hover */
+}
+.applications-list li a:hover .oc-application-icon svg,
+.applications-list li button:hover .oc-application-icon svg,
+.applications-list li a:focus .oc-application-icon svg,
+.applications-list li button:focus .oc-application-icon svg,
+.applications-list .oc-button-primary .oc-application-icon svg,
+.applications-list .router-link-active .oc-application-icon svg {
+  fill: #0F152A !important;                                      /* dark ink, = selected-tile glyph */
+}
+
+/* ------------------------------------------------------------
+   16. "Selected" item in role/permission dropdowns and in the app
+   switcher: light-grey fill + a LEADING (left) checkmark, replacing
+   the periwinkle "primary gradient" fill (which put its check on the
+   right, or — in the app switcher — carried no check at all).
+   Explicit light-grey hex (not a token) on purpose: the chip must
+   stay light grey on BOTH surfaces — the dark right-hand share panel
+   and the light app-switcher menu. --oc-color-background-muted
+   resolves DARK inside the dark share panel, which would make the
+   role chip dark-grey there.
+   ------------------------------------------------------------ */
+
+/* --- Role / permission dropdown (share recipient, public link, space member) --- */
+.files-recipient-role-drop-btn.selected {
+  background-image: none !important;              /* drop the periwinkle gradient */
+  background-color: #F0F0EF !important;           /* grey 200 */
+  justify-content: flex-start !important;         /* was space-between -> check on the right */
+}
+.files-recipient-role-drop-btn.selected,
+.files-recipient-role-drop-btn.selected * {
+  color: #0F152A !important;                      /* dark ink, readable on the grey */
+}
+.files-recipient-role-drop-btn.selected .oc-icon > svg {
+  fill: #0F152A !important;
+}
+/* the option's trailing check span becomes the leading element */
+.files-recipient-role-drop-btn.selected > span:last-child {
+  order: -1;
+  margin-right: 6px;
+}
+
+/* --- App switcher: current (selected) app --- */
+.applications-list .oc-button-primary,
+.applications-list .router-link-active {
+  background-image: none !important;              /* drop the periwinkle gradient */
+  background-color: #F0F0EF !important;           /* grey 200 */
+  justify-content: flex-start !important;
+}
+.applications-list .oc-button-primary,
+.applications-list .router-link-active,
+.applications-list .oc-button-primary *,
+.applications-list .router-link-active * {
+  color: #0F152A !important;
+}
+/* the app-switcher row carries no check element, so inject one on the LEFT
+   (a masked copy of the same remix check glyph the role dropdown uses) */
+.applications-list .oc-button-primary::before,
+.applications-list .router-link-active::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  background-color: #0F152A;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M9.9997%2015.1709L19.1921%205.97852L20.6063%207.39273L9.9997%2017.9993L3.63574%2011.6354L5.04996%2010.2212L9.9997%2015.1709Z'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M9.9997%2015.1709L19.1921%205.97852L20.6063%207.39273L9.9997%2017.9993L3.63574%2011.6354L5.04996%2010.2212L9.9997%2015.1709Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+/* ------------------------------------------------------------
+   17. Font = SF Pro (Kiteworks). Core ships Inter (loaded as a webfont and
+   wired through --oc-font-family: Inter, sans-serif). Repoint the token at
+   the SF Pro system stack and force it on the root elements so it cascades
+   everywhere (most components read the token; a few hardcode "Inter").
+   -apple-system / BlinkMacSystemFont resolve to SF Pro on macOS.
+   ------------------------------------------------------------ */
+:root {
+  --oc-font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "SF Pro", "Helvetica Neue", Arial, sans-serif !important;
+}
+html, body, button, input, select, textarea, .oc-text-input, .oc-textarea {
+  font-family: var(--oc-font-family) !important;
+}
+
+/* ------------------------------------------------------------
+   18. Filter toggles: the SELECTED option keeps WHITE text — the resting
+   state and, crucially, on hover/focus too (the section-8 passive-raw hover
+   rule would otherwise grey it). Covers both filter flavours:
+   - inline filter options (Shares view: "Shares" / "Hidden Shares")
+   - filter chips (Spaces view: "Include disabled", plus Share Type / Shared By)
+   Selectors are scoped to the filter container so they out-specify section 8.
+   ------------------------------------------------------------ */
+.item-inline-filter .item-inline-filter-option-selected,
+.item-inline-filter .item-inline-filter-option-selected:hover:not([disabled]),
+.item-inline-filter .item-inline-filter-option-selected:focus:not([disabled]),
+.oc-filter-chip .oc-filter-chip-button-selected,
+.oc-filter-chip .oc-filter-chip-button-selected:hover:not([disabled]),
+.oc-filter-chip .oc-filter-chip-button-selected:focus:not([disabled]) {
+  color: #ffffff !important;
+}
+.item-inline-filter-option-selected *,
+.oc-filter-chip-button-selected * {
+  color: #ffffff !important;
+}
+.item-inline-filter-option-selected .oc-icon > svg,
+.oc-filter-chip-button-selected .oc-icon > svg {
+  fill: #ffffff !important;
+}
+
+/* ------------------------------------------------------------
+   19. Dropdown refinements (role/permission dropdown + app switcher),
+   building on items 15 & 16:
+   (a) Tighten the gap between the leading check and the row content
+       (~16px row-gap → ~8px) via a -8px margin on the check.
+   (b) Align NON-selected rows' content with the selected row: give them
+       an invisible leading spacer the same width as the check, so every
+       row's icon+text starts at the same x (selected rows are indented by
+       the check, unselected rows weren't).
+   (c) App switcher only: the selected app's icon TILE was light-blue
+       (item 15), invisible against the light-grey selection. Make it a
+       darker grey than the selection with the glyph in the text-ink color.
+   ------------------------------------------------------------ */
+
+/* --- App switcher --- */
+.applications-list .oc-button-primary::before,
+.applications-list .router-link-active::before {
+  margin-right: -8px;                     /* net ~8px to the icon (row gap is 16px) */
+}
+.applications-list .oc-button-passive-raw::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 20px;                            /* = check width, reserves the gutter */
+  height: 20px;
+  margin-right: -8px;
+}
+/* selected app icon tile: darker grey than the #F0F0EF selection + dark glyph.
+   .oc-flex-inline chained raises specificity above the item-15 tile rules. */
+.applications-list .oc-button-primary .oc-application-icon.oc-flex-inline,
+.applications-list .router-link-active .oc-application-icon.oc-flex-inline {
+  background: #E1E0DE !important;         /* grey 300, darker than the selection */
+  box-shadow: none !important;
+}
+.applications-list .oc-button-primary .oc-application-icon.oc-flex-inline svg,
+.applications-list .router-link-active .oc-application-icon.oc-flex-inline svg {
+  fill: #0F152A !important;               /* = text ink color */
+}
+
+/* --- Role / permission dropdown --- */
+.files-recipient-role-drop-btn {
+  justify-content: flex-start !important; /* all rows: leading element + content, left-aligned */
+}
+.files-recipient-role-drop-btn.selected > span:last-child {
+  order: -1;
+  margin-right: 0 !important;             /* keep the button's ~16px flex row-gap between check and content */
+}
+.files-recipient-role-drop-btn:not(.selected)::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 22px;                            /* = role-icon/check width, reserves the gutter */
+  height: 22px;
+  margin-right: 0;                        /* match selected row: full ~16px row-gap to content */
+}
+
+/* ------------------------------------------------------------
+   20. Right side-panel "Actions" list: each item keeps its RESTING color
+   on hover/focus (label + icon) — no lightening/bluing. Item 8 already
+   does this for passive-raw buttons generally; this pins it explicitly for
+   the sidebar actions (id-scoped so it can't touch the 3-dot context menu),
+   guaranteeing the behaviour regardless of cascade/token quirks.
+   Resting color here is text-muted (#585757).
+   ------------------------------------------------------------ */
+#oc-files-actions-sidebar .action-menu-item:hover:not([disabled]),
+#oc-files-actions-sidebar .action-menu-item:focus:not([disabled]),
+#oc-files-actions-sidebar > li a:hover,
+#oc-files-actions-sidebar > li a:focus {
+  color: var(--oc-color-text-muted) !important;
+}
+#oc-files-actions-sidebar .action-menu-item:hover:not([disabled]) .oc-icon > svg,
+#oc-files-actions-sidebar .action-menu-item:focus:not([disabled]) .oc-icon > svg {
+  fill: var(--oc-color-text-muted) !important;
+}
+
+/* ------------------------------------------------------------
+   21. Public-link permission dropdown (LinkRoleDropdown) — same treatment as
+   the recipient role dropdown (items 16 & 19): light-grey selected chip, dark
+   text, checkmark moved to the LEFT, rows aligned, check->content gap halved.
+   Different component from the recipient one: options are OcButtons with id
+   files-role-<id> inside .role-dropdown-list (drop wrapper .link-role-dropdown);
+   the selected option carries .selected + oc-background-primary-gradient.
+   ------------------------------------------------------------ */
+
+/* selected option: drop the periwinkle gradient -> light-grey chip + dark ink */
+.link-role-dropdown .role-dropdown-list .selected,
+.role-dropdown-list [id^="files-role-"].selected {
+  background-image: none !important;
+  background-color: #F0F0EF !important;      /* grey 200, same as item 16 */
+  justify-content: flex-start !important;
+}
+.role-dropdown-list [id^="files-role-"].selected,
+.role-dropdown-list [id^="files-role-"].selected * {
+  color: #0F152A !important;
+}
+.role-dropdown-list [id^="files-role-"].selected .oc-icon > svg {
+  fill: #0F152A !important;
+}
+/* move the trailing check to the left; keep full ~16px flex row-gap to content */
+.role-dropdown-list [id^="files-role-"].selected > span:last-child {
+  order: -1;
+  margin-right: 0 !important;
+}
+/* all rows left-aligned; non-selected get an invisible leading spacer so their
+   icon+text line up with the selected row */
+.role-dropdown-list [id^="files-role-"] {
+  justify-content: flex-start !important;
+}
+.role-dropdown-list [id^="files-role-"]:not(.selected)::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 22px;    /* = check/icon width; confirmed/tuned against live DOM */
+  height: 22px;
+  margin-right: 0;   /* match selected row: full ~16px row-gap to content */
+}
