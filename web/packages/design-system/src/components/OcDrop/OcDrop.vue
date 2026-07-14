@@ -355,7 +355,10 @@ defineExpose({ show, hide, tippy: tippyInstance })
       }
 
       &:hover span {
-        color: var(--oc-color-swatch-brand-hover) !important;
+        color: var(
+          --oc-color-menu-item-hover-color,
+          var(--oc-color-swatch-brand-hover)
+        ) !important;
       }
 
       span {

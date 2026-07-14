@@ -283,7 +283,7 @@ const loadingAccessibleLabelValue = computed(() => {
   }
 
   &-input {
-    border-radius: 25px !important;
+    border-radius: var(--oc-radius-input, 25px) !important;
     border: none;
     padding: var(--oc-space-medium);
     color: var(--oc-color-input-text-muted) !important;

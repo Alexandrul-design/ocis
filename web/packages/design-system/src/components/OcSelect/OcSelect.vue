@@ -466,9 +466,9 @@ onBeforeUnmount(() => {
     &__dropdown-menu {
       -webkit-appearance: none;
       appearance: none;
-      background-color: var(--oc-color-background-highlight);
+      background-color: var(--oc-color-input-bg, var(--oc-color-background-highlight));
       border-radius: 0;
-      border-radius: 5px;
+      border-radius: var(--oc-radius-input, 5px);
       border: 1px solid var(--oc-color-input-border);
       box-sizing: border-box;
       color: var(--oc-color-input-text-default);

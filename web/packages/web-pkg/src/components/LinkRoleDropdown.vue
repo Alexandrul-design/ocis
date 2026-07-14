@@ -134,13 +134,24 @@ const dropUuid = uuidV4()
 
     &:hover,
     &:focus {
-      background-color: var(--oc-color-background-hover);
+      background-color: var(--oc-color-background-dropdown-hover, var(--oc-color-background-hover));
       text-decoration: none;
+    }
+
+    &.selected,
+    &.selected:hover,
+    &.selected:focus {
+      background: var(--oc-color-background-dropdown-selected, var(--oc-color-swatch-primary-gradient)) !important;
+      color: var(--oc-color-swatch-passive-default) !important;
+
+      :deep(.oc-icon > svg) {
+        fill: var(--oc-color-swatch-passive-default) !important;
+      }
     }
   }
 
   .selected span {
-    color: var(--oc-color-swatch-primary-contrast);
+    color: var(--oc-color-swatch-passive-default);
   }
 }
 </style>

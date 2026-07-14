@@ -177,7 +177,7 @@ defineExpose({
   padding-bottom: var(--oc-space-xsmall);
   padding-top: var(--oc-space-xsmall);
   box-sizing: border-box;
-  background: var(--oc-color-background-muted);
+  background: var(--oc-color-input-bg, var(--oc-color-background-muted));
   border: 0 none;
   margin: 0;
   color: var(--oc-color-text-default);
@@ -191,7 +191,7 @@ defineExpose({
 
   &:focus {
     border-color: var(--oc-color-input-text-default);
-    background-color: var(--oc-color-background-muted);
+    background-color: var(--oc-color-input-bg, var(--oc-color-background-muted));
     color: var(--oc-color-text-default);
   }
 

@@ -173,7 +173,11 @@ export default defineComponent({
 
 #web-nav-sidebar {
   background-color: var(--oc-color-background-sidebar, var(--oc-color-background-default));
-  border-radius: 15px 0 0 15px;
+  color: var(--oc-color-text-sidebar-default, inherit);
+  border-top-left-radius: var(--oc-radius-sidebar-nav, 15px);
+  border-bottom-left-radius: var(--oc-radius-sidebar-nav, 15px);
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
   box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.2);
   display: flex;
   flex-direction: column;
@@ -188,6 +192,10 @@ export default defineComponent({
   .toggle-sidebar-button {
     min-height: 3rem;
     transition: all 0.2s ease-out;
+
+    .oc-icon > svg {
+      fill: var(--oc-color-icon-sidebar-default, currentColor);
+    }
 
     &:hover {
       overflow: hidden;
@@ -212,11 +220,21 @@ export default defineComponent({
 
   .oc-sidebar-nav li a:not(.active),
   .oc-sidebar-nav li button:not(.active) {
+    color: var(--oc-color-text-sidebar-default, var(--oc-color-swatch-passive-default));
+
+    .oc-icon > svg {
+      fill: var(--oc-color-icon-sidebar-default, var(--oc-color-swatch-passive-default));
+    }
+
     &:hover,
     &:focus {
       text-decoration: none !important;
-      background-color: var(--oc-color-background-hover);
-      color: var(--oc-color-swatch-passive-default);
+      background-color: var(--oc-color-background-sidebar-hover, var(--oc-color-background-hover));
+      color: var(--oc-color-text-sidebar-default, var(--oc-color-swatch-passive-default));
+
+      .oc-icon > svg {
+        fill: var(--oc-color-icon-sidebar-default, var(--oc-color-swatch-passive-default));
+      }
     }
   }
 

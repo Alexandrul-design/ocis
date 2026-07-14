@@ -229,9 +229,9 @@ watch(
     display: flex;
     flex-direction: row;
     padding: 0;
-    border-radius: 5px;
+    border-radius: var(--oc-radius-input, 5px);
     border: 1px solid var(--oc-color-input-border);
-    background-color: var(--oc-color-background-highlight);
+    background-color: var(--oc-color-input-bg, var(--oc-color-background-highlight));
 
     input {
       flex-grow: 2;

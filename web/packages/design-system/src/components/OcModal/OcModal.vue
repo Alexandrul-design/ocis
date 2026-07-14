@@ -324,7 +324,7 @@ const iconName = computed(() => {
 .oc-modal {
   background-color: var(--oc-color-background-default);
   border: 1px solid var(--oc-color-input-border);
-  border-radius: 15px;
+  border-radius: var(--oc-radius-modal, 15px);
   box-shadow: 5px 0 25px rgba(0, 0, 0, 0.3);
   max-height: 90dvh;
   max-width: 500px;
@@ -435,7 +435,7 @@ const iconName = computed(() => {
 
   .oc-text-input-password-wrapper {
     button {
-      background-color: var(--oc-color-background-highlight) !important;
+      background-color: var(--oc-color-input-bg, var(--oc-color-background-highlight)) !important;
     }
   }
 }

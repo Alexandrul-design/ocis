@@ -267,6 +267,7 @@ const handlers = computed(() => {
 
   align-items: center;
   border: 0;
+  border-radius: var(--oc-radius-button, 4px);
   box-sizing: border-box;
   display: inline-flex;
   font-weight: 400;
@@ -358,12 +359,35 @@ const handlers = computed(() => {
     &-outline {
       &:focus:not([disabled]),
       &:hover:not([disabled]) {
-        color: var(--oc-color-swatch-passive-contrast);
+        color: var(
+          --oc-color-swatch-passive-outline-hover-color,
+          var(--oc-color-swatch-passive-contrast)
+        );
         background-color: var(--oc-color-swatch-passive-hover-outline);
         border-color: var(--oc-color-swatch-passive-hover-outline);
 
         .oc-icon > svg {
-          fill: var(--oc-color-swatch-passive-contrast);
+          fill: var(
+            --oc-color-swatch-passive-outline-hover-color,
+            var(--oc-color-swatch-passive-contrast)
+          );
+        }
+      }
+    }
+
+    &-raw {
+      &:focus:not([disabled]),
+      &:hover:not([disabled]) {
+        color: var(
+          --oc-color-swatch-passive-raw-hover-color,
+          var(--oc-color-swatch-passive-hover)
+        );
+
+        .oc-icon > svg {
+          fill: var(
+            --oc-color-swatch-passive-raw-hover-color,
+            var(--oc-color-swatch-passive-hover)
+          );
         }
       }
     }

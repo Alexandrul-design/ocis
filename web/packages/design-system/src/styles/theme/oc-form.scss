@@ -41,10 +41,10 @@ $form-line-height: $form-height !default;
 $form-padding-horizontal: var(--oc-space-small) !default;
 $form-padding-vertical: var(--oc-space-xsmall) !default;
 
-$form-background: var(--oc-color-background-muted) !default;
+$form-background: var(--oc-color-input-bg, var(--oc-color-background-muted)) !default;
 $form-color: var(--oc-color-text-default) !default;
 
-$form-focus-background: var(--oc-color-background-highlight) !default;
+$form-focus-background: var(--oc-color-input-bg, var(--oc-color-background-highlight)) !default;
 $form-focus-color: var(--oc-color-text-default) !default;
 
 $form-disabled-background: var(--oc-color-background-muted) !default;
@@ -252,7 +252,7 @@ $internal-form-checkbox-indeterminate-image: "data:image/svg+xml;charset=UTF-8,%
   background-color: $form-focus-background;
   background-origin: border-box;
   border-radius: 0;
-  border-radius: 5px;
+  border-radius: var(--oc-radius-input, 5px);
   border: 1px solid var(--oc-color-input-border);
   box-sizing: border-box;
   color: var(--oc-color-input-text-default);

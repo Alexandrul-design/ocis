@@ -41,6 +41,7 @@ const DesignTokens = z.object({
   colorPalette: z.record(z.string(), z.string()).optional(),
   fontFamily: z.string().optional(),
   fontSizes: z.record(z.string(), z.string()).optional(),
+  radii: z.record(z.string(), z.string()).optional(),
   sizes: z.record(z.string(), z.string()).optional(),
   spacing: z.record(z.string(), z.string()).optional()
 })
@@ -163,6 +164,7 @@ export const useThemeStore = defineStore('theme', () => {
       { name: 'breakpoints', prefix: 'breakpoint' },
       { name: 'colorPalette', prefix: 'color' },
       { name: 'fontSizes', prefix: 'font-size' },
+      { name: 'radii', prefix: 'radius' },
       { name: 'sizes', prefix: 'size' },
       { name: 'spacing', prefix: 'spacing' }
     ] as const

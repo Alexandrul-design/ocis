@@ -119,9 +119,9 @@ hr {
 
 // outline for visible focus (via tab)
 *:focus-visible:not(input[type=text]):not(input[type=textarea]):not(input[type=search]):not(input[type=password]):not(input[type=email]):not(input[type=date]) {
-  outline: 2px var(--oc-color-swatch-passive-contrast) solid;
+  outline: 2px var(--oc-color-focus-ring-inner-color, var(--oc-color-swatch-passive-contrast)) solid;
   outline-offset: 0;
-  box-shadow: 0 0 0 4px var(--oc-color-swatch-passive-default);
+  box-shadow: 0 0 0 4px var(--oc-color-focus-ring-outer-color, var(--oc-color-swatch-passive-default));
 }
 
 // inner outline for visible focus on resource names

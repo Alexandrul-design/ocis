@@ -187,8 +187,28 @@ export default defineComponent({
     }
 
     &:hover {
-      background-color: var(--oc-color-background-hover);
+      background-color: var(--oc-color-background-dropdown-hover, var(--oc-color-background-hover));
       text-decoration: none;
+    }
+
+    &.router-link-active,
+    &.router-link-active:hover,
+    &.router-link-active:focus {
+      background: var(--oc-color-background-dropdown-selected, var(--oc-color-swatch-primary-gradient)) !important;
+      color: var(--oc-color-swatch-passive-default) !important;
+
+      :deep(.oc-icon > svg) {
+        fill: var(--oc-color-swatch-passive-default) !important;
+      }
+
+      // App-icon glyph inside a selected row: read the dedicated token,
+      // fall back to today's white for stock ownCloud themes.
+      :deep(.oc-application-icon .oc-icon svg) {
+        fill: var(
+          --oc-color-icon-application-selected-color,
+          var(--oc-color-swatch-primary-contrast)
+        ) !important;
+      }
     }
 
     .icon-box {
@@ -202,6 +222,15 @@ export default defineComponent({
     .active-check {
       position: absolute;
       right: 1rem;
+    }
+
+    // App-icon TILE background in the switcher: token-driven.
+    // If --oc-color-background-application-icon is unset (stock ownCloud),
+    // the invalid `var()` result makes the declaration ignored so the
+    // per-app inline gradient wins.
+    :deep(.oc-application-icon) {
+      background: var(--oc-color-background-application-icon) !important;
+      box-shadow: none !important;
     }
   }
 }
